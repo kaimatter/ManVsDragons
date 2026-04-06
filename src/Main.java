@@ -1,6 +1,6 @@
 import java.util.Random;
 import java.util.Scanner;
-import java.util.random.RandomGenerator;
+// removed unused import
 
 public class Main {
     public static void main(String[] args) {
@@ -31,11 +31,11 @@ public class Main {
                                  o-o _//        /-~_>---<__-~      /
                                  (^(~          /~_>---<__-      _-~
                                 ,/|           /__>--<__/     _-~
-                             ,//('(          |__>--<__|     /                  .----_
-                            ( ( '))          |__>--<__|    |                 /' _---_~\\\\
-                         `-)) )) (           |__>--<__|    |                /'  /     ~\\\\`\\\\
-                        ,/,'//( (             \\\\__>--<__\\\\    \\\\            /'  //        ||
-                      ,( ( ((, ))              ~-__>--<_~-_  ~--____---~' _/'/        /'
+                             ,//('(          |__>--<__|     /
+                            ( ( '))          |__>--<__|    |
+                         `-)) )) (           |__>--<__|    |
+                        ,/,'//( (             \\\\__>--<__\\\\    \\\\
+                      ,( ( ((, ))              ~-__>--<_~-_  ~--____---~'_/'//'
                     `~/  )` ) ,/|                 ~-_~>--<_/-__       __-~ _/
                   ._-~//( )/ )) `                    ~~-'_/_/ /~~~~~~~__--~
                    ;'( ')/ ,)(                              ~~~~~~~~~~
@@ -53,152 +53,99 @@ public class Main {
         System.out.print("Enter Hero's Damage: ");
         int heroDamage = scanner.nextInt();
 
-
         // Dragon HP and Damage
-        int dragon1hp = 100;
-        int dragon1Damage = 20;
-        int dragon2hp = 100;
-        int dragon2Damage = 20;
-        int dragon3hp = 100;
-        int dragon3Damage = 20;
+        Dragon[] dragons = new Dragon[3];
+        dragons[0] = new Dragon(1000, 200);
+        dragons[1] = new Dragon(1000, 200);
+        dragons[2] = new Dragon(1000, 200);
 
-
-
-        while(true) {
+        while (true) {
             System.out.println("Hero has " + heroHP + " HP and " + heroDamage + " points of damage!");
-            System.out.println("Dragon Status");
-            System.out.println("***************");
-            System.out.println("Dragon 1 has " + dragon1hp + " HP and deals " + dragon1Damage + " points of damage!");
-            System.out.println("Dragon 2 has " + dragon2hp + " HP and deals " + dragon2Damage + " points of damage!");
-            System.out.println("Dragon 3 has " + dragon3hp + " HP and deals " + dragon3Damage + " points of damage!");
+            printDragonStatus(dragons);
 
-            // Starts the battle until all dragons are dead or hero is dead
-            if ((heroHP < 1) || (dragon1hp < 1 && dragon2hp < 1 && dragon3hp < 1)) {
+            if ((heroHP < 1) || (dragons[0].getHitPoints() < 1 && dragons[1].getHitPoints() < 1 && dragons[2].getHitPoints() < 1)) {
                 break;
             }
 
-            //Logic behind the hero attacking
             int dragonChoice = 0;
             while (dragonChoice < 1 || dragonChoice > 3) {
                 System.out.println("""
-██╗   ██╗ ██████╗ ██╗   ██╗██████╗     ████████╗██╗   ██╗██████╗ ███╗   ██╗
-╚██╗ ██╔╝██╔═══██╗██║   ██║██╔══██╗    ╚══██╔══╝██║   ██║██╔══██╗████╗  ██║
- ╚████╔╝ ██║   ██║██║   ██║██████╔╝       ██║   ██║   ██║██████╔╝██╔██╗ ██║
-  ╚██╔╝  ██║   ██║██║   ██║██╔══██╗       ██║   ██║   ██║██╔══██╗██║╚██╗██║
-   ██║   ╚██████╔╝╚██████╔╝██║  ██║       ██║   ╚██████╔╝██║  ██║██║ ╚████║
-   ╚═╝    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝       ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝
-""");
-                System.out.println("It's your turn to attack! Which Dragon would you like to attack(1, 2, 3)?");
+                        ██╗   ██╗ ██████╗ ██╗   ██╗██████╗     ████████╗██╗   ██╗██████╗ ███╗   ██╗
+                        ╚██╗ ██╔╝██╔═══██╗██║   ██║██╔══██╗    ╚══██╔══╝██║   ██║██╔══██╗████╗  ██║
+                         ╚████╔╝ ██║   ██║██║   ██║██████╔╝       ██║   ██║   ██║██████╔╝██╔██╗ ██║
+                          ╚██╔╝  ██║   ██║██║   ██║██╔══██╗       ██║   ██║   ██║██╔══██╗██║╚██╗██║
+                           ██║   ╚██████╔╝╚██████╔╝██║  ██║       ██║   ╚██████╔╝██║  ██║██║ ╚████║
+                           ╚═╝    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝       ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝
+                        """);
+
+
+                System.out.println("Its your turn to attack! Which Dragon will you hit?");
                 dragonChoice = scanner.nextInt();
-            }
-            System.out.println("Attacking dragon " + dragonChoice + "!");
+                System.out.println();
 
-            if (dragonChoice == 1) {
-                if (dragon1hp < 1) {
-                    System.out.println("Dragon 1 has already been slain. You wasted your turn!");
+                heroAttackDragon(dragons, dragonChoice, heroDamage, random);
 
-                } else {
-                    int heroHitsForDmg = random.nextInt(heroDamage);
-                    dragon1hp = dragon1hp - heroDamage;
-                    System.out.println("You did " + heroHitsForDmg + " damage to dragon 1!");
-                }
-
-            } else if (dragonChoice == 2) {
-                if (dragon2hp < 1) {
-                    System.out.println("Dragon 2 has already been defeated! You lose your turn!");
-                } else {
-                    int heroHitsForDmg = random.nextInt(heroDamage);
-                    dragon2hp = dragon2hp - heroHitsForDmg;
-                    System.out.println("You did " + heroHitsForDmg + " damage to dragon 2!");
-                }
-
-            } else if (dragonChoice == 3) {
-                if (dragon3hp < 1) {
-                    System.out.println("Dragon 1 has already been defeated! You lose your turn!");
-                } else {
-                    int heroHitsForDmg = random.nextInt(heroDamage);
-                    dragon3hp = dragon3hp - heroHitsForDmg;
-                    System.out.println("You did " + heroHitsForDmg + " damage to dragon 3!");
-                }
             }
 
-            //Dragons attacking  phase
             System.out.println("""
-██╗   ██╗███╗   ██╗██████╗ ███████╗██████╗      █████╗ ████████╗████████╗ █████╗  ██████╗██╗  ██╗
-██║   ██║████╗  ██║██╔══██╗██╔════╝██╔══██╗    ██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
-██║   ██║██╔██╗ ██║██║  ██║█████╗  ██████╔╝    ███████║   ██║      ██║   ███████║██║     █████╔╝ 
-██║   ██║██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗    ██╔══██║   ██║      ██║   ██╔══██║██║     ██╔═██╗ 
-╚██████╔╝██║ ╚████║██████╔╝███████╗██║  ██║    ██║  ██║   ██║      ██║   ██║  ██║╚██████╗██║  ██╗
- ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
-""");
-            System.out.println("The dragons are attacking now!");
-            if (dragon1hp > 0) ; {
-                int dragonHitsForDmg = random.nextInt(dragon1Damage);
-                heroHP = heroHP - dragonHitsForDmg;
-                System.out.println("Dragon 1 hit you for" + dragonHitsForDmg + "damage!");
-            }
-            if(dragon2hp  > 0); {
-                int dragonHitsForDmg = random.nextInt(dragon2Damage);
-                heroHP = heroHP - dragonHitsForDmg;
-                System.out.println("Dragon 2 hit you for" + dragonHitsForDmg + "damage!");
-            }
-            if (dragon3hp  > 0);{
-                int dragonHitsForDmg = random.nextInt(dragon3Damage);
-                heroHP = heroHP - dragonHitsForDmg;
-                System.out.println("Dragon 3 hit you for" + dragonHitsForDmg + "damage!");
-            }
+                    ██╗   ██╗███╗   ██╗██████╗ ███████╗██████╗      █████╗ ████████╗████████╗ █████╗  ██████╗██╗  ██╗
+                    ██║   ██║████╗  ██║██╔══██╗██╔════╝██╔══██╗    ██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+                    ██║   ██║██╔██╗ ██║██║  ██║█████╗  ██████╔╝    ███████║   ██║      ██║   ███████║██║     █████╔╝ 
+                    ██║   ██║██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗    ██╔══██║   ██║      ██║   ██╔══██║██║     ██╔═██╗ 
+                    ╚██████╔╝██║ ╚████║██████╔╝███████╗██║  ██║    ██║  ██║   ██║      ██║   ██║  ██║╚██████╗██║  ██╗
+                     ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+                    """);
+
+            dragonsAttackHero(dragons, heroHP);
 
         }
+
         System.out.println("Battle Outcome");
         System.out.println("*************");
         System.out.println("Hero has " + heroHP + " HP and " + heroDamage + " points of damage!");
-        System.out.println("Dragon 1 has " + dragon1hp + " HP and deals " + dragon1Damage + " points of damage!");
-        System.out.println("Dragon 2 has " + dragon2hp + " HP and deals " + dragon2Damage+ " points of damage!");
-        System.out.println("Dragon 3 has " + dragon3hp +  " HP and deals " + dragon3Damage+ " points of damage!");
-        if(heroHP < 1) {
+        printDragonStatus(dragons);
+
+        if (heroHP < 1) {
             System.out.println("You have fallen in battle...");
         } else {
-            System.out.println("""
-██╗   ██╗██╗ ██████╗████████╗ ██████╗ ██████╗ ██╗ ██████╗ ██╗   ██╗███████╗
-██║   ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██║██╔═══██╗██║   ██║██╔════╝
-██║   ██║██║██║        ██║   ██║   ██║██████╔╝██║██║   ██║██║   ██║███████╗
-╚██╗ ██╔╝██║██║        ██║   ██║   ██║██╔══██╗██║██║   ██║██║   ██║╚════██║
- ╚████╔╝ ██║╚██████╗   ██║   ╚██████╔╝██║  ██║██║╚██████╔╝╚██████╔╝███████║
-  ╚═══╝  ╚═╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝  ╚═════╝ ╚══════╝
-""");
-            System.out.println(
-                    """
-                               . ,
-                             <( .)>
-                              //'
-                             //                |||
-                          __//_   _,,,,,    \\_///|
-                         /___\\\\  (.  __\\_   \\_,_/
-                        / Q--\\'  |_o \\:::)  / |
-                       /.(|_______)\\___/___/-.|
-                       |  / /' \\ _  ~ \\_  /  /
-                       .---/__  ""\"\\_/""_/--'
-                             /\\......./
-                            (_/_ _,,_/
-                             ;;;;[X];__
-                            /# . ._) . )-----.
-                           /. . . .\\. /   , __>
-                    ((     | . . . .|__-( __/
-                             . . . .   |__/
-                             ) .--., )  >Xxx
-                             //  _>)/    / X\\
-                            (/  __/     O  X\\
-                             / __/       \\ X\\
-                             |__/         `._\\  ))
-                             Xxx<
-                             / X\\
-                            O  X\\
-                             \\ X\\
-                            ,,`._\\,,,,, ,,
-                    """);
             System.out.println("You Bested the dragons!");
         }
+    }
 
+    private static void heroAttackDragon(Dragon[] dragons, int dragonChoice, int heroDamage, Random random) {
 
+        Dragon target = dragons[dragonChoice - 1];
+
+        if (target.getHitPoints() < 1) {
+            System.out.println("Dragon " + dragonChoice + " is already dead!");
+            return;
+        }
+
+        int heroHitsForDmg = random.nextInt(heroDamage);
+        target.setHitPoints(target.getHitPoints() - heroHitsForDmg);
+
+        System.out.println("You hit Dragon " + dragonChoice + " for " + heroHitsForDmg + " HP!");
+
+    }
+
+    private static void dragonsAttackHero(Dragon[] dragons, int heroHP) {
+        //Dragons attack Hero
+        Random random = new Random();
+        for (int i = 0; i < dragons.length; i++) {
+            if (dragons[i].getHitPoints() > 0) {
+                int dragonHitsForDmg = random.nextInt(dragons[i].getDamage());
+                heroHP = heroHP - dragonHitsForDmg;
+            }
+        }
+    }
+
+    // ✅ FIXED: now inside class
+    private static void printDragonStatus(Dragon[] dragons) {
+        System.out.println("Dragons Status");
+        System.out.println("--------------");
+
+        for (int i = 0; i < dragons.length; i++) {
+            System.out.println("Dragon " + (i + 1) + " " + dragons[i].getHitPoints() + " HP and deals " + dragons[i].getDamage() + " points of damage");
+        }
     }
 }
