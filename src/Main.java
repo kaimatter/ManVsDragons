@@ -48,10 +48,16 @@ public class Main {
         // Grab User Configuration data points
         Scanner scanner = new Scanner(System.in);
 
+
+        Hero hero = new Hero();
         System.out.print("Enter Hero HP: ");
-        int heroHP = scanner.nextInt();
+
+        int userInput = scanner.nextInt();
+        hero.setHitPoints(userInput);
         System.out.print("Enter Hero's Damage: ");
-        int heroDamage = scanner.nextInt();
+        userInput = scanner.nextInt();
+        hero.setDamage(userInput);
+
 
         // Dragon HP and Damage
         Dragon[] dragons = new Dragon[3];
@@ -60,10 +66,10 @@ public class Main {
         dragons[2] = new Dragon(1000, 200);
 
         while (true) {
-            System.out.println("Hero has " + heroHP + " HP and " + heroDamage + " points of damage!");
+            System.out.println("Hero has " + hero.getHitPoints() + " HP and " + hero.getDamage() + " points of damage!");
             printDragonStatus(dragons);
 
-            if ((heroHP < 1) || (dragons[0].getHitPoints() < 1 && dragons[1].getHitPoints() < 1 && dragons[2].getHitPoints() < 1)) {
+            if ((hero.getHitPoints() < 1) || (dragons[0].getHitPoints() < 1 && dragons[1].getHitPoints() < 1 && dragons[2].getHitPoints() < 1)) {
                 break;
             }
 
@@ -83,7 +89,7 @@ public class Main {
                 dragonChoice = scanner.nextInt();
                 System.out.println();
 
-                heroAttackDragon(dragons, dragonChoice, heroDamage, random);
+                heroAttackDragon(dragons, dragonChoice, hero.getDamage(), random);
 
             }
 
@@ -96,16 +102,16 @@ public class Main {
                      ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
                     """);
 
-            dragonsAttackHero(dragons, heroHP);
+            dragonsAttackHero(dragons, hero);
 
         }
 
         System.out.println("Battle Outcome");
         System.out.println("*************");
-        System.out.println("Hero has " + heroHP + " HP and " + heroDamage + " points of damage!");
+        System.out.println("Hero has " + hero.getHitPoints() + " HP and " + hero.getDamage() + " points of damage!");
         printDragonStatus(dragons);
 
-        if (heroHP < 1) {
+        if (hero.getHitPoints() < 1) {
             System.out.println("You have fallen in battle...");
         } else {
             System.out.println("You Bested the dragons!");
@@ -128,18 +134,19 @@ public class Main {
 
     }
 
-    private static void dragonsAttackHero(Dragon[] dragons, int heroHP) {
+    private static void dragonsAttackHero(Dragon[] dragons, Hero hero) {
         //Dragons attack Hero
         Random random = new Random();
         for (int i = 0; i < dragons.length; i++) {
             if (dragons[i].getHitPoints() > 0) {
                 int dragonHitsForDmg = random.nextInt(dragons[i].getDamage());
-                heroHP = heroHP - dragonHitsForDmg;
+                int newHitPoints = hero.getHitPoints() - dragonHitsForDmg;
+                hero.setHitPoints(newHitPoints);
             }
         }
     }
 
-    // ✅ FIXED: now inside class
+    // now inside class
     private static void printDragonStatus(Dragon[] dragons) {
         System.out.println("Dragons Status");
         System.out.println("--------------");

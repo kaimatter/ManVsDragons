@@ -1,6 +1,13 @@
 public class Dragon {
     private int hitPoints;
     private int damage;
+    private int critChance;
+
+    public Dragon() {
+        hitPoints = 50;
+        damage = 5;
+        critChance = 2;
+    }
 
     public Dragon(int hitPoints, int damage) {
         this.hitPoints = hitPoints;
